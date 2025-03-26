@@ -2,7 +2,7 @@
 
 import { EditUserProfileSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { FormControl, FormField, FormItem, FormLabel, Form } from "../ui/form";
@@ -20,18 +20,27 @@ const ProfileForm = () => {
       email: "",
     },
   });
+
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    setLoading(true);
+
+    setLoading(false);
+  };
+
   return (
     <Form {...form}>
-      <form className='flex flex-col gap-6' onSubmit={() => {}}>
+      <form className="flex flex-col gap-6 max-w-2xl" onSubmit={onSubmit}>
         <FormField
           disabled={loading}
           control={form.control}
-          name='name'
+          name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='text-lg'>User Full Name</FormLabel>
+              <FormLabel className="text-lg">User Full Name</FormLabel>
               <FormControl>
-                <Input placeholder='Name' {...field} />
+                <Input type="text" placeholder="Name" {...field} />
               </FormControl>
             </FormItem>
           )}
@@ -39,19 +48,22 @@ const ProfileForm = () => {
         <FormField
           disabled={loading}
           control={form.control}
-          name='email'
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='text-lg'>User Full Name</FormLabel>
+              <FormLabel className="text-lg">User Email</FormLabel>
               <FormControl>
-                <Input placeholder='Email' type='email' {...field} />
+                <Input placeholder="Email" type="email" {...field} />
               </FormControl>
             </FormItem>
           )}
         />
-        <Button type='submit'>
+        <Button type="submit" className="w-fit">
           {loading ? (
-            <Loader2 className='mr-2 h-4 w-5 animate-spin' />
+            <>
+              Saving
+              <Loader2 className="mr-2 h-4 w-5 animate-spin" />
+            </>
           ) : (
             "Save User Settings"
           )}
